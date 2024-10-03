@@ -1,0 +1,149 @@
+{
+	"info": {
+		"_postman_id": "2a44babc-56cd-410a-9633-2c7d9cf013b4",
+		"name": "Pet Store",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28698796",
+		"_collection_link": "https://universal-escape-840963.postman.co/workspace/SoftUni-Demo~982aeeab-d690-4bfa-9381-ac8ae37834ce/collection/28698796-2a44babc-56cd-410a-9633-2c7d9cf013b4?action=share&source=collection_link&creator=28698796"
+	},
+	"item": [
+		{
+			"name": "Get All Pets",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log('This is executed after the request');"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(pm.variables.get('baseUrl'))\r",
+							"pm.variables.set('thisIsADynamicVar', 'SampleValue')\r",
+							"console.log(pm.variables.get('thisIsADynamicVar'))\r",
+							"console.log(pm.response.json())\r",
+							"const bodyAsText = pm.response.text();\r",
+							"\r",
+							"if (bodyAsText.toLocaleLowerCase().includes('pet')) {\r",
+							"    console.log('Body has the pet keyword');\r",
+							"} else {\r",
+							"    console.log('Body does not have the pet keyword')\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Content-Type header is application/json\", function () {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"PhotoUrls array is present and not empty\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array');\r",
+							"    responseData.forEach(function(pet) {\r",
+							"        pm.expect(pet.photoUrls).to.exist.and.to.be.an('array').and.to.have.lengthOf.at.least(1, \"PhotoUrls array should not be empty\");\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Tags array is present and not empty\", function () {\r",
+							"  const responseData = pm.response.json();\r",
+							"  \r",
+							"  pm.expect(responseData).to.be.an('array');\r",
+							"  pm.expect(responseData).to.have.lengthOf.at.least(1, \"Array should not be empty\");\r",
+							"  responseData.forEach(function(pet) {\r",
+							"      pm.expect(pet.tags).to.exist;\r",
+							"  });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Id field is a non-zero positive integer\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array');\r",
+							"    responseData.forEach(function(pet) {\r",
+							"        pm.expect(pet.id).to.be.above(0).and.to.be.a('number');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Name is a non-empty string\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    responseData.forEach(function(pet) {\r",
+							"        pm.expect(pet.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Status is one of the expected values\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array');\r",
+							"    responseData.forEach(function(pet) {\r",
+							"        pm.expect(pet.status).to.be.oneOf([\"available\", \"pending\", \"sold\"]);\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Category object is present with non-zero positive id and non-empty name\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array');\r",
+							"    \r",
+							"    responseData.forEach(function(pet){\r",
+							"        pm.expect(pet.category).to.exist;\r",
+							"        pm.expect(pet.category.id).to.be.above(0);\r",
+							"        pm.expect(pet.category.name).to.be.a('string').and.to.have.lengthOf.at.least(1);\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://petstore.swagger.io/v2/pet/findByStatus?status=pending&test=helloWorld",
+					"protocol": "https",
+					"host": [
+						"petstore",
+						"swagger",
+						"io"
+					],
+					"path": [
+						"v2",
+						"pet",
+						"findByStatus"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "pending"
+						},
+						{
+							"key": "test",
+							"value": "helloWorld"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
